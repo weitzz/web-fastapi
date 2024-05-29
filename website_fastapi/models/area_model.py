@@ -2,15 +2,14 @@
 from sqlalchemy import Column, Integer, String
 
 from website_fastapi.core.database import Base
-from sqlalchemy.orm import Mapped,mapped_column,registry
-
-table_registry = registry()
+from sqlalchemy.orm import relationship
 
 
-@table_registry.mapped_as_dataclass
+
 class AreaModel(Base):
     """Dúvidas respondidas no FAQ são categorizadas em áreas"""
     __tablename__: str = 'areas'
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    area: Mapped[str] = mapped_column(String(100))
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    area: str = Column(String(100))
+    doubts = relationship('DoubtModel', back_populates='area')

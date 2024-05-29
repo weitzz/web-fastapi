@@ -1,21 +1,19 @@
 from datetime import datetime
 
-from models.post_model import PostModel
-from sqlalchemy import  DateTime, ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped,mapped_column,registry,relationship
+from sqlalchemy import  DateTime, ForeignKey, Integer, String,Column
+from sqlalchemy.orm import relationship
 from website_fastapi.core.database import Base
-table_registry = registry()
+from website_fastapi.models.post_model import PostModel
 
-
-@table_registry.mapped_as_dataclass
 class CommentModel(Base):
     __tablename__: str = 'comments'
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    data: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
+    id: int = Column(Integer, primary_key=True, autoincrement=True)
+    data: datetime = Column(DateTime, default=datetime.now, index=True)
+    author: str = Column(String(200))
+    text: str = Column(String(400))
 
-    id_post: Mapped[int] = mapped_column(Integer, ForeignKey('posts.id'))
-    post: Mapped[PostModel] = relationship('PostModel', lazy='joined')
+    id_post: int = Column(Integer, ForeignKey('posts.id'))
+    post: PostModel = relationship('PostModel', back_populates='comments')
 
-    author: Mapped[str] = mapped_column(String(200))
-    text: Mapped[str] = mapped_column(String(400))
+    __allow_unmapped__ = True

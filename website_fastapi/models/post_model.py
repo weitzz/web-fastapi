@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import List
-from models.author_model import AuthorModel
-from models.tag_model import TagModel
+
 from sqlalchemy import (
     Column,
     DateTime,
@@ -12,9 +11,11 @@ from sqlalchemy import (
 )
 
 from website_fastapi.core.database import Base
-from sqlalchemy.orm import Mapped, mapped_column, registry,relationship
+from sqlalchemy.orm import relationship
 
-table_registry = registry()
+from website_fastapi.models.author_model import AuthorModel
+from website_fastapi.models.tag_model import TagModel
+
 
 
 tags_post = Table(
@@ -29,26 +30,26 @@ comments_post = Table(
     'comments_post',
     Base.metadata,
     Column('id_post', Integer, ForeignKey('posts.id')),
-    Column('id_comment', Integer, ForeignKey('comments_.id'))
+    Column('id_comment', Integer, ForeignKey('comments.id'))
 )
 
-@table_registry.mapped_as_dataclass
+
 class PostModel(Base):
 
     __tablename__: str = 'posts'
 
-    id:Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    title: Mapped[str] = mapped_column(String(200))
-    data: Mapped[datetime] = mapped_column(DateTime, default=datetime.now, index=True)
+    id:int = Column(Integer, primary_key=True, autoincrement=True)
+    title: str = Column(String(200))
+    data: datetime = Column(DateTime, default=datetime.now, index=True)
+    image: str = Column(String(100))  # 900x400
+    text: str = Column(String(1000))
 
-    tags: List[TagModel] = relationship('TagModel', secondary=tags_post, backref='tagp', lazy='joined')
-
-    image: Mapped[str] = mapped_column(String(100))  # 900x400
-    text: Mapped[str] = mapped_column(String(1000))
+    tags: List[TagModel] = relationship('TagModel', secondary=tags_post, backref='posts', lazy='joined')
 
     # Um Post pode ter vários comentários (Não importamos e usamos ComentarioModel como tipo de dados aqui pois causa erro de import circular com a tabela ComentarioModel)
-    comments: List[object] = relationship('CommentsModel', secondary=comments_post, backref='comentario', lazy='joined')
+    comments: List[object] = relationship('CommentsModel', back_populates='comments_post', lazy='joined')
 
-    id_author: Mapped[int] = mapped_column(Integer, ForeignKey('authors.id'))
-    author: Mapped[AuthorModel] = relationship('AuthorModel', lazy='joined')
+    id_author: int = Column(Integer, ForeignKey('authors.id'))
+    author: AuthorModel = relationship('AuthorModel', back_populates='posts',lazy='joined')
     
+    __allow_unmapped__ = True

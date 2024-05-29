@@ -23,14 +23,14 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from website_fastapi.models.member_model import MemberModel
-# from website_fastapi.models.area_model import AreaModel
-# from website_fastapi.models.author_model import AuthorModel
-# from website_fastapi.models.tag_model import TagModel
+from website_fastapi.models.area_model import AreaModel
+from website_fastapi.models.doubt_model import DoubtModel
 from website_fastapi.models.project_model import ProjectModel
-# from website_fastapi.models.post_model import PostModel
-# from website_fastapi.models.doubt_model import DoubtModel
-# from website_fastapi.models.comment_model import CommentModel
-# from website_fastapi.models import table_registry
+from website_fastapi.models.author_model import AuthorModel
+from website_fastapi.models.tag_model import TagModel
+from website_fastapi.models.post_model import PostModel
+from website_fastapi.models.comment_model import CommentModel
+
 
 
 target_metadata = Base.metadata
