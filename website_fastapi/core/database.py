@@ -12,7 +12,7 @@ from sqlalchemy.orm import declarative_base
 from website_fastapi.core.configs import get_settings
 settings = get_settings()
 
-DB_URL: str = 'postgresql://postgres:admin@localhost:5432/webfastdb'
+DB_URL: str = 'postgresql://postgres:'
  
 engine = create_engine(settings.DB_URL)
 
