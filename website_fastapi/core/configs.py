@@ -10,7 +10,7 @@ template_dir = os.path.join(script_dir, "templates/")
 
 
 class Settings(BaseSettings):
-    DB_URL: str = 'postgresql+asyncpg://postgres:admin@webfastdb:5432/webfastdb'
+    DB_URL: str = 'postgresql+asyncpg://postgres:'
     # TEMPLATES:any = Jinja2Templates(directory='templates/')
     #MEDIA: any = Path('media')
 
